@@ -16,7 +16,6 @@ export function CreateAdModal() {
 
     const [games, setGames] = useState<Game[]>([])
     const [weekDays, setWeekdays] = useState<string[]>([])
-    const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false)
 
     useEffect(() => {
         axios('http://localhost:3000/games')
@@ -46,7 +45,7 @@ export function CreateAdModal() {
                     weekDays: weekDays.map(Number),
                     hourStart: data.hourStart,
                     hourEnd: data.hourEnd,
-                    useVoiceChannel: useVoiceChannel
+                    useVoiceChannel: data.useVoiceChannel === 'on'
                 })
                 
             alert('Anúncio criado com sucesso!')
@@ -57,7 +56,7 @@ export function CreateAdModal() {
     }
 
     return (
-        <Dialog.Portal>
+        <Dialog.Portal className='overflow-visible'>
             <Dialog.Overlay className='bg-black/60 inset-0 fixed'>
                 <Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[480px] shadow-black/25'>
                     <Dialog.Title className='text-3xl font-black'>Publique um anúncio</Dialog.Title>
@@ -180,8 +179,7 @@ export function CreateAdModal() {
 
                         <label className='mt-2 flex gap-2 text-sm items-center'>
                             <Checkbox.Root
-                                checked={useVoiceChannel}
-                                onCheckedChange={(checked) => { checked === true ? setUseVoiceChannel(true) : setUseVoiceChannel(false) }}
+                                name={'useVoiceChannel'}
                                 className='w-6 h-6 p-1 rounded bg-zinc-900'
                             >
                                 <Checkbox.Indicator>
