@@ -37,6 +37,7 @@ function App() {
   const [games, setGames] = useState<Game[]>([])
   const [ads, setAds] = useState<Ad[]>([])
   const [hideCarouselArrow, setHideCarouselArrow] = useState<boolean>(false)
+  const [selectedGame, setSelectedGame] = useState<string>('')
 
   useEffect(() => {
     axios('http://localhost:3000/games')
@@ -70,7 +71,10 @@ function App() {
                   bannerUrl={game.bannerUrl}
                   title={game.title}
                   adsCount={game._count.ads}
-                  onClick={() => getAds(game.id)}
+                  onClick={() => { 
+                    setSelectedGame(game.title)
+                    getAds(game.id)
+                  }}
                 />
               </Carousel.Item>
             )
@@ -79,7 +83,7 @@ function App() {
         <Dialog.Portal>
           <Dialog.Overlay className='bg-black/80 inset-0 fixed' />
           <Dialog.Content className='fixed bg-gradient-to-b w-full h-[450px] from-[#211933] to-[#16151A] px-10 inset-0 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 justify-center'>
-            <Dialog.Title className='text-3xl font-black self-center mb-6'>Anúncios publicados</Dialog.Title>
+            <Dialog.Title className='text-3xl font-black self-center mb-6'>{ads.length > 0 ? `Anúncios para jogar ${selectedGame}` : 'Ops!'}</Dialog.Title>
             {
               ads.length > 0 ?
                 <Carousel cols={6} rows={1} gap={24}>
@@ -96,7 +100,7 @@ function App() {
                   }
                 </Carousel>
                 :
-                <div className='h-[300px] flex items-center'>
+                <div className='h-[300px] text-xl flex items-center justify-center'>
                   Não há anúncios publicados para esse game
                 </div>
             }
